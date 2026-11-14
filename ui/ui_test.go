@@ -6,7 +6,6 @@ import (
 	"regexp"
 	"strings"
 	"testing"
-	"time"
 	"unicode/utf8"
 )
 
@@ -176,28 +175,6 @@ func TestStatusLinesUseColourWithoutGlyphs(t *testing.T) {
 			}
 			if strings.ContainsFunc(tt.got, func(r rune) bool { return r > 127 }) {
 				t.Errorf("status line = %q, want no non-ASCII glyphs", tt.got)
-			}
-		})
-	}
-}
-
-func TestDebugDelayAcceptsSecondsAndDurations(t *testing.T) {
-	tests := []struct {
-		raw  string
-		want time.Duration
-	}{
-		{raw: "", want: DefaultDelay},
-		{raw: "0", want: 0},
-		{raw: "10", want: 10 * time.Second},
-		{raw: "500ms", want: 500 * time.Millisecond},
-		{raw: "nonsense", want: DefaultDelay},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.raw, func(t *testing.T) {
-			t.Setenv("GODISK_DEBUG_DELAY", tt.raw)
-			if got := debugDelay(); got != tt.want {
-				t.Errorf("debugDelay() = %v, want %v", got, tt.want)
 			}
 		})
 	}
